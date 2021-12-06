@@ -8,7 +8,7 @@ class CargoTrain < Train
   end
 
   def add_van(cargo_van)
-    @list_cargo_vans << cargo_van if @speed == 0
+    @list_cargo_vans << cargo_van if @speed == 0 and cargo_van.type == "cargo"
   end
 
   def del_van(cargo_van)
