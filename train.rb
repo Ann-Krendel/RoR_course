@@ -1,6 +1,12 @@
+require "./models.rb"
 class Train
+
+  extend Producer
+  extend InstanceCounter
   
   attr_reader :station, :number, :list_vans
+
+
   def initialize(number)
     @number = number
     @speed = 0
@@ -54,6 +60,10 @@ class Train
     @station.depart_train(self)
     @station = self.previous_station
     @station.add_train(self)
+  end
+
+  def self.find(number)
+    return @trains[@trains.index { |x| x == number}]
   end
 
   private

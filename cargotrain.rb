@@ -1,4 +1,8 @@
+require "./models.rb"
 class CargoTrain < Train
+
+  extend Producer
+  extend InstanceCounter
   
   attr_reader :list_cargo_vans, :number
   def initialize(number)

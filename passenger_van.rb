@@ -1,5 +1,9 @@
+require "./models.rb"
 class PassengerVan
   
+  extend Producer
+  extend InstanceCounter
+
   attr_reader :number_pass_van, :type
   def initialize(number_pass_van)
     type = "passenger"
