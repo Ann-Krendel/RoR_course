@@ -1,7 +1,7 @@
 require "./models.rb"
 class Train
 
-  extend Producer
+  include Producer
   extend InstanceCounter
   
   attr_reader :station, :number, :list_vans
@@ -11,6 +11,7 @@ class Train
     @number = number
     @speed = 0
     @list_vans=[]
+    self.register_instance
   end
 
   def add_station(station)

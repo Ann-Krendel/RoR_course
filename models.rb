@@ -1,12 +1,11 @@
 module Producer 
 
-  def made_by
-    puts "Введите название компании - производителя: "
-    @name_factory = gets.to_s
+  def made_by(name)
+    @name_factory = name
   end
 
   def producer
-    puts "Компаниия - производитель: " + @name_factory.to_s
+    @name_factory
   end 
 
 end
@@ -21,8 +20,8 @@ module InstanceCounter
 
   protected
 
-  def self.register_instance
-    @@instances+=1
+  def register_instance
+    @@instances += 1
   end
 
 end

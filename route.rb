@@ -1,7 +1,7 @@
 require "./models.rb"
 class Route
 
-  extend InstanceCounter
+  include InstanceCounter
 
   attr_reader :list_stations, :route_name
   def initialize(first_station, last_station, route_name)
@@ -9,6 +9,7 @@ class Route
     @first_station = first_station
     @last_station = last_station
     @list_stations = []
+    @@instances = 0
   end
 
   def add_station(station)
