@@ -1,7 +1,7 @@
-require "./models.rb"
+require "./modules.rb"
 class Station
 
-  extend InstanceCounter
+  include InstanceCounter
 
   attr_reader :trains, :name, :cargo_trains, :pass_trains
   def initialize(name)
@@ -9,6 +9,7 @@ class Station
     @cargo_trains = []
     @pass_trains = []
     self.class.all << self
+    register_instance
   end
 
   def self.all

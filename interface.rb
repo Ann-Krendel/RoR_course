@@ -112,18 +112,18 @@ class Interface
       puts "Введите номер грузового поезда"
       num_cargo = gets.to_i
       puts "\n"
-      cargo_train = CargoTrain.new(num_cargo)
       puts "Введите производителя грузового поезда"
-      cargo_train.made_by(gets)
+      maker_cargo = gets
+      cargo_train = CargoTrain.new(num_cargo, maker_cargo)
       puts "\n"
       @cargo_trains << cargo_train
     when 2
       puts "Введите номер пассажирского поезда"
       num_pass = gets.to_i
       puts "\n"
-      pass_train = PassengerTrain.new(num_pass)
       puts "Введите производителя пассажирского поезда"
-      pass_train.made_by(gets)
+      maker_pass = gets
+      pass_train = PassengerTrain.new(num_pass, maker_pass)
       puts "\n"
       @pass_trains << pass_train
     end
@@ -219,17 +219,17 @@ class Interface
       choose_cargo_train
       puts "\nВведите номер грузового вагона"
       number_van = gets.to_i
-      cargo_van = CargoVan.new(number_van)
       puts "\nВведите изготовителя грузового вагона"
-      cargo_van.made_by(gets)
+      cargo_van_maker = gets
+      cargo_van = CargoVan.new(number_van, cargo_van_maker)
       @cargo_trains[@num_cargo].add_van(cargo_van)
     when 2
       choose_passenger_train
       puts "\nВведите номер пассажирского вагона"
       number_van = gets.to_i
-      pass_van = PassengerVan.new(number_van)
       puts "\nВведите изготовителя пассажирского вагона"
-      pass_van.made_by(gets)
+      pass_van_maker = gets
+      pass_van = PassengerVan.new(number_van, pass_van_maker)
       @pass_trains[@num_pass].add_van(pass_van)
     end
     puts "\n"

@@ -1,17 +1,18 @@
-require "./models.rb"
+require "./modules.rb"
 class Train
 
   include Producer
-  extend InstanceCounter
+  include InstanceCounter
   
   attr_reader :station, :number, :list_vans
 
 
-  def initialize(number)
+  def initialize(number, maker)
     @number = number
     @speed = 0
     @list_vans=[]
-    self.register_instance
+    self.name_factory = maker
+    register_instance
   end
 
   def add_station(station)

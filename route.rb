@@ -1,4 +1,4 @@
-require "./models.rb"
+require "./modules.rb"
 class Route
 
   include InstanceCounter
@@ -9,7 +9,7 @@ class Route
     @first_station = first_station
     @last_station = last_station
     @list_stations = []
-    @@instances = 0
+    register_instance
   end
 
   def add_station(station)

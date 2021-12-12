@@ -1,15 +1,13 @@
-require "./models.rb"
+require "./modules.rb"
 class PassengerVan
   
   include Producer
-  extend InstanceCounter
 
   attr_reader :number_pass_van, :type
-  def initialize(number_pass_van)
+  def initialize(number_pass_van, maker)
     type = "passenger"
     @number_pass_van = number_pass_van
-    @@instances = 0
-    self.register_instance
+    self.name_factory = maker
   end
     
 end

@@ -1,12 +1,15 @@
 class CargoTrain < Train
+
+  include InstanceCounter
   
   attr_reader :list_cargo_vans, :number
   
-  def initialize(number)
+  def initialize(number, maker)
     @list_cargo_vans = []
     @speed = 0
     @number = number
-    self.register_instance
+    self.name_factory = maker
+    register_instance
   end
 
   def add_van(cargo_van)
