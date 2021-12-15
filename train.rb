@@ -12,7 +12,25 @@ class Train
     @speed = 0
     @list_vans=[]
     self.name_factory = maker
+
+    is_valid, msg = valid?
+    if is_valid == false
+      raise StandardError.new(msg)
+    end
+
+    message
     register_instance
+  end
+
+  def valid?
+    regexp = /^([a-zA-Z]|\d){3}-*([a-zA-Z]|\d){2}$/
+    if @number !~ regexp
+      return false, msg = "invalid number\n\n"
+    end
+    if self.name_factory == "\n"
+      return false, msg = "invalid factory name\n\n"
+    end
+    return true
   end
 
   def add_station(station)
@@ -66,6 +84,10 @@ class Train
 
   def self.find(number)
     return @trains[@trains.index { |x| x == number}]
+  end
+
+  def message
+    puts "Зарегистрирован поезд № #{@number}"
   end
 
   private

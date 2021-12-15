@@ -9,6 +9,13 @@ class CargoTrain < Train
     @speed = 0
     @number = number
     self.name_factory = maker
+
+    is_valid, msg = valid?
+    if is_valid == false
+      raise StandardError.new(msg)
+    end
+    
+    message
     register_instance
   end
 

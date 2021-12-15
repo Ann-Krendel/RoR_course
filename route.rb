@@ -9,7 +9,21 @@ class Route
     @first_station = first_station
     @last_station = last_station
     @list_stations = []
+    
+    is_valid, msg = valid?
+    if is_valid == false
+      raise StandardError.new(msg)
+    end
+
+    message
     register_instance
+  end
+
+  def valid?
+    if @route_name == "\n"
+      return false, msg = "invalid name\n\n"
+    end
+    return true
   end
 
   def add_station(station)
@@ -26,6 +40,10 @@ class Route
   
   def delete_station(station)
     @list_stations.delete(station) {|x| x==station}
+  end
+
+  def message
+    puts "Маршрут под названием #{@route_name} успешно cоздан"
   end
 
 end

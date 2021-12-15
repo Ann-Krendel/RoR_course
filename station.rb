@@ -8,8 +8,18 @@ class Station
     @name = name
     @cargo_trains = []
     @pass_trains = []
+
+    if valid? == false
+      raise StandardError.new("invalid name\n\n")
+    end
+
+    message
     self.class.all << self
     register_instance
+  end
+
+  def valid?
+    return @name != "\n"
   end
 
   def self.all
@@ -40,6 +50,10 @@ class Station
     if train.class == PassengerTrain
       @pass_trains.delete(train)
     end
+  end
+
+  def message
+    puts "Станция с названием #{@name} успешно cоздана"
   end
 
 end

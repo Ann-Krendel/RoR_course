@@ -89,7 +89,11 @@ class Interface
     puts "Введите название станции:"
     name = gets.to_s
     puts "\n"
-    station = Station.new(name)
+    begin
+      station = Station.new(name)
+    rescue StandardError => e
+      puts "Exception: #{e.message}"
+    end
     @stations << station
     create_station
   end
@@ -109,21 +113,29 @@ class Interface
     puts "\n"
     case type
     when 1
-      puts "Введите номер грузового поезда"
-      num_cargo = gets.to_i
+      puts "Введите номер грузового поезда в формате ***-**, последовательность цифровая либо буквенная (EN)"
+      num_cargo = gets
       puts "\n"
       puts "Введите производителя грузового поезда"
       maker_cargo = gets
-      cargo_train = CargoTrain.new(num_cargo, maker_cargo)
+      begin
+        cargo_train = CargoTrain.new(num_cargo, maker_cargo)
+      rescue StandardError => e
+        puts "Exception: #{e.message}"
+      end
       puts "\n"
       @cargo_trains << cargo_train
     when 2
-      puts "Введите номер пассажирского поезда"
-      num_pass = gets.to_i
+      puts "Введите номер пассажирского поезда в формате ***-**, последовательность цифровая либо буквенная (EN)"
+      num_pass = gets
       puts "\n"
       puts "Введите производителя пассажирского поезда"
       maker_pass = gets
-      pass_train = PassengerTrain.new(num_pass, maker_pass)
+      begin
+        pass_train = PassengerTrain.new(num_pass, maker_pass)
+      rescue StandardError => e
+        puts "Exception: #{e.message}"
+      end
       puts "\n"
       @pass_trains << pass_train
     end
@@ -146,7 +158,11 @@ class Interface
     puts "\nВыберите последнюю станцию маршрута:"
     choose_station
     last_station = gets.to_i
-    route = Route.new(@stations[first_station], @stations[last_station], r_name)
+    begin
+      route = Route.new(@stations[first_station], @stations[last_station], r_name)
+    rescue StandardError => e
+      puts "Exception: #{e.message}"
+    end
     @routes << route
     while true
       puts "Выберите действие:
@@ -221,7 +237,11 @@ class Interface
       number_van = gets.to_i
       puts "\nВведите изготовителя грузового вагона"
       cargo_van_maker = gets
-      cargo_van = CargoVan.new(number_van, cargo_van_maker)
+      begin
+        cargo_van = CargoVan.new(number_van, cargo_van_maker)
+      rescue StandardError => e
+        puts "Exception: #{e.message}"
+      end
       @cargo_trains[@num_cargo].add_van(cargo_van)
     when 2
       choose_passenger_train
@@ -229,7 +249,11 @@ class Interface
       number_van = gets.to_i
       puts "\nВведите изготовителя пассажирского вагона"
       pass_van_maker = gets
-      pass_van = PassengerVan.new(number_van, pass_van_maker)
+      begin
+        pass_van = PassengerVan.new(number_van, pass_van_maker)
+      rescue StandardError => e
+        puts "Exception: #{e.message}"
+      end
       @pass_trains[@num_pass].add_van(pass_van)
     end
     puts "\n"
