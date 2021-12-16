@@ -8,18 +8,20 @@ class Station
     @name = name
     @cargo_trains = []
     @pass_trains = []
-
-    if valid? == false
-      raise StandardError.new("invalid name\n\n")
-    end
-
+    valid!
     message
     self.class.all << self
     register_instance
   end
 
+  def valid!
+    if valid? == false
+      raise StandardError.new("invalid name\n\n")
+    end
+  end
+
   def valid?
-    return @name != "\n"
+    return @name != ""
   end
 
   def self.all

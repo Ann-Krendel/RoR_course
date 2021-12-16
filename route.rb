@@ -9,18 +9,20 @@ class Route
     @first_station = first_station
     @last_station = last_station
     @list_stations = []
-    
-    is_valid, msg = valid?
-    if is_valid == false
-      raise StandardError.new(msg)
-    end
-
+    valid!
     message
     register_instance
   end
 
+  def valid!
+    is_valid, msg = valid?
+    if is_valid == false
+      raise StandardError.new(msg)
+    end
+  end
+
   def valid?
-    if @route_name == "\n"
+    if @route_name == ""
       return false, msg = "invalid name\n\n"
     end
     return true

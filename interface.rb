@@ -87,7 +87,7 @@ class Interface
       return
     end
     puts "Введите название станции:"
-    name = gets.to_s
+    name = gets.chomp
     puts "\n"
     begin
       station = Station.new(name)
@@ -117,7 +117,7 @@ class Interface
       num_cargo = gets
       puts "\n"
       puts "Введите производителя грузового поезда"
-      maker_cargo = gets
+      maker_cargo = gets.chomp
       begin
         cargo_train = CargoTrain.new(num_cargo, maker_cargo)
       rescue StandardError => e
@@ -130,7 +130,7 @@ class Interface
       num_pass = gets
       puts "\n"
       puts "Введите производителя пассажирского поезда"
-      maker_pass = gets
+      maker_pass = gets.chomp
       begin
         pass_train = PassengerTrain.new(num_pass, maker_pass)
       rescue StandardError => e
@@ -151,7 +151,7 @@ class Interface
       return
     end
     puts "Введите название маршрута:"
-    r_name = gets.to_s
+    r_name = gets.chomp
     puts "\nВыберите первую станцию маршрута:"
     choose_station
     first_station = gets.to_i
@@ -236,25 +236,25 @@ class Interface
       puts "\nВведите номер грузового вагона"
       number_van = gets.to_i
       puts "\nВведите изготовителя грузового вагона"
-      cargo_van_maker = gets
+      cargo_van_maker = gets.chomp
       begin
         cargo_van = CargoVan.new(number_van, cargo_van_maker)
+        @cargo_trains[@num_cargo].add_van(cargo_van)
       rescue StandardError => e
         puts "Exception: #{e.message}"
       end
-      @cargo_trains[@num_cargo].add_van(cargo_van)
     when 2
       choose_passenger_train
       puts "\nВведите номер пассажирского вагона"
       number_van = gets.to_i
       puts "\nВведите изготовителя пассажирского вагона"
-      pass_van_maker = gets
+      pass_van_maker = gets.chomp
       begin
         pass_van = PassengerVan.new(number_van, pass_van_maker)
+        @pass_trains[@num_pass].add_van(pass_van)
       rescue StandardError => e
         puts "Exception: #{e.message}"
       end
-      @pass_trains[@num_pass].add_van(pass_van)
     end
     puts "\n"
     add_vans

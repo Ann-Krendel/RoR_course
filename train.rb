@@ -12,14 +12,16 @@ class Train
     @speed = 0
     @list_vans=[]
     self.name_factory = maker
+    valid!
+    message
+    register_instance
+  end
 
+  def valid!
     is_valid, msg = valid?
     if is_valid == false
       raise StandardError.new(msg)
     end
-
-    message
-    register_instance
   end
 
   def valid?
@@ -27,7 +29,7 @@ class Train
     if @number !~ regexp
       return false, msg = "invalid number\n\n"
     end
-    if self.name_factory == "\n"
+    if self.name_factory == ""
       return false, msg = "invalid factory name\n\n"
     end
     return true

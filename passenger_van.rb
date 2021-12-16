@@ -8,28 +8,29 @@ class PassengerVan
     type = "passenger"
     @number_pass_van = number_pass_van
     self.name_factory = maker
+    valid!
+    message
+  end
 
+  def valid!
     is_valid, msg = valid?
     if is_valid == false
       raise StandardError.new(msg)
     end
-    
-    message
   end
 
   def valid?
-    if @number_pass_van == "\n"
+    if @number_pass_van = 0
       return false, msg = "invalid number\n\n"
     end
-    if self.name_factory == "\n"
+    if self.name_factory == ""
       return false, msg = "invalid factory name\n\n"
     end
     return true
   end
 
-
   def message
-    puts "Зарегистрирован пассажирский вагон № #{@number}"
+    puts "Зарегистрирован пассажирский вагон № #{@number_pass_van}"
   end
     
 end
