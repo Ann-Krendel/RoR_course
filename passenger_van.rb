@@ -13,20 +13,15 @@ class PassengerVan
   end
 
   def valid!
-    is_valid, msg = valid?
-    if is_valid == false
-      raise StandardError.new(msg)
-    end
+    raise StandardError.new("invalid object\n\n") if !valid?
+    true
   end
 
   def valid?
-    if @number_pass_van = 0
-      return false, msg = "invalid number\n\n"
+    if self.name_factory == "" || @number_pass_van == 0
+      return false
     end
-    if self.name_factory == ""
-      return false, msg = "invalid factory name\n\n"
-    end
-    return true
+    true
   end
 
   def message

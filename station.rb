@@ -15,13 +15,15 @@ class Station
   end
 
   def valid!
-    if valid? == false
-      raise StandardError.new("invalid name\n\n")
-    end
+    raise StandardError.new("invalid object\n\n") if !valid?
+    true
   end
 
   def valid?
-    return @name != ""
+    if @name == ""
+      return false
+    end
+    true
   end
 
   def self.all

@@ -18,21 +18,15 @@ class Train
   end
 
   def valid!
-    is_valid, msg = valid?
-    if is_valid == false
-      raise StandardError.new(msg)
-    end
+    raise StandardError.new("invalid object\n\n") if !valid?
+    true
   end
 
   def valid?
-    regexp = /^([a-zA-Z]|\d){3}-*([a-zA-Z]|\d){2}$/
-    if @number !~ regexp
-      return false, msg = "invalid number\n\n"
+    if @number !~ /^([a-zA-Z]|\d){3}-*([a-zA-Z]|\d){2}$/ || self.name_factory == ""
+      return false
     end
-    if self.name_factory == ""
-      return false, msg = "invalid factory name\n\n"
-    end
-    return true
+    true
   end
 
   def add_station(station)

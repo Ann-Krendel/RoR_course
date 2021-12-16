@@ -15,17 +15,15 @@ class Route
   end
 
   def valid!
-    is_valid, msg = valid?
-    if is_valid == false
-      raise StandardError.new(msg)
-    end
+    raise StandardError.new("invalid object\n\n") if !valid?
+    true
   end
 
   def valid?
     if @route_name == ""
-      return false, msg = "invalid name\n\n"
+      return false
     end
-    return true
+    true
   end
 
   def add_station(station)
