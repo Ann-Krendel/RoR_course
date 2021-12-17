@@ -18,7 +18,8 @@ class Train
   end
 
   def valid!
-    raise StandardError.new("invalid object\n\n") if !valid?
+    raise StandardError.new("invalid number\n\n") if @number !~ /^([a-zA-Z]|\d){3}-*([a-zA-Z]|\d){2}$/
+    raise StandardError.new("invalid factory\n\n") if self.name_factory == ""
     true
   end
 

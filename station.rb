@@ -15,7 +15,7 @@ class Station
   end
 
   def valid!
-    raise StandardError.new("invalid object\n\n") if !valid?
+    raise StandardError.new("invalid name\n\n") if @name == ""
     true
   end
 

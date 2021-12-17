@@ -15,7 +15,7 @@ class Route
   end
 
   def valid!
-    raise StandardError.new("invalid object\n\n") if !valid?
+    raise StandardError.new("invalid name\n\n") if @route_name == ""
     true
   end
 
