@@ -56,6 +56,18 @@ class Station
     end
   end
 
+  def each_cargo_train(&block)
+    @cargo_trains.each do |train|
+      block.call(train)
+    end
+  end
+
+  def each_pass_train(&block)
+    @pass_trains.each do |train|
+      block.call(train)
+    end
+  end
+
   def message
     puts "Станция с названием #{@name} успешно cоздана"
   end

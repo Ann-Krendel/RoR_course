@@ -71,6 +71,10 @@ class Interface
         clear
         puts "Отлично, выбрана команда " + num.to_s + ")" + " Просматривать список станций и список поездов на станции"
         station_train_list
+      when 9
+        clear
+        puts "Отлично, выбрана команда " + num.to_s + ")" + " Занимать место либо объем в вагоне"
+        taken_place
       end
     end
   end
@@ -235,10 +239,12 @@ class Interface
       choose_cargo_train
       puts "\nВведите номер грузового вагона"
       number_van = gets.to_i
+      puts "\nВведите объем грузового вагона"
+      cargo_vol = gets.to_i
       puts "\nВведите изготовителя грузового вагона"
       cargo_van_maker = gets.chomp
       begin
-        cargo_van = CargoVan.new(number_van, cargo_van_maker)
+        cargo_van = CargoVan.new(number_van, cargo_van_maker, cargo_vol)
         @cargo_trains[@num_cargo].add_van(cargo_van)
       rescue StandardError => e
         puts "Exception: #{e.message}"
@@ -247,10 +253,12 @@ class Interface
       choose_passenger_train
       puts "\nВведите номер пассажирского вагона"
       number_van = gets.to_i
+      puts "\nВведите количество мест в пассажирском вагоне"
+      pass_seats = gets.to_i
       puts "\nВведите изготовителя пассажирского вагона"
       pass_van_maker = gets.chomp
       begin
-        pass_van = PassengerVan.new(number_van, pass_van_maker)
+        pass_van = PassengerVan.new(number_van, pass_van_maker, pass_seats)
         @pass_trains[@num_pass].add_van(pass_van)
       rescue StandardError => e
         puts "Exception: #{e.message}"
@@ -381,6 +389,30 @@ class Interface
     end
     puts "\n"
     station_train_list
+  end
+
+  def taken_place
+    puts @exit_continue
+    van_mod = gets.to_i
+    if van_mod == 0
+      return
+    end
+    puts "\nВыберите тип поезда:
+    1) cargo - Грузовой
+    2) passenger - Пассажирский"
+    type = gets.to_i
+    case type
+    when 1
+      choose_cargo_train
+      choose_cargo_van
+      @cargo_trains[@num_cargo].taken_volume
+    when 2
+      choose_passenger_train
+      choose_passenger_van
+      @pass_trains[@num_pass].taken_seat
+    end
+    puts "\n"
+    taken_place
   end
 
   def choose_cargo_train

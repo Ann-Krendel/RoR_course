@@ -87,6 +87,14 @@ class Train
     puts "Зарегистрирован поезд № #{@number}"
   end
 
+  def each_van(&block)
+    @list_vans.each do |van|
+      block.call(van)
+    end
+    puts "--------------------------------"
+    puts "Все объекты переданны успешно!!!"
+  end
+
   private
 
   def speed_increase(speed) #чтобы только сам поезд мог увеличить свою скорость
