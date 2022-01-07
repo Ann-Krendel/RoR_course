@@ -25,7 +25,8 @@ class Interface
     5 - Добавлять вагоны к поезду
     6 - Отцеплять вагоны от поезда
     7 - Перемещать поезд по маршруту вперед и назад
-    8 - Просматривать список станций и список поездов на станции"
+    8 - Просматривать список станций и список поездов на станции
+    9 - Занимать место либо объем в вагоне"
   end
 
 
@@ -236,7 +237,7 @@ class Interface
     type_van = gets.to_i
     case type_van
     when 1
-      choose_cargo_train
+      cargo_train = choose_cargo_train
       puts "\nВведите номер грузового вагона"
       number_van = gets.to_i
       puts "\nВведите объем грузового вагона"
@@ -245,12 +246,13 @@ class Interface
       cargo_van_maker = gets.chomp
       begin
         cargo_van = CargoVan.new(number_van, cargo_van_maker, cargo_vol)
-        @cargo_trains[@num_cargo].add_van(cargo_van)
+        # @cargo_trains[@num_cargo].add_van(cargo_van)
+        cargo_train.add_van(cargo_van)
       rescue StandardError => e
         puts "Exception: #{e.message}"
       end
     when 2
-      choose_passenger_train
+      pass_train = choose_passenger_train
       puts "\nВведите номер пассажирского вагона"
       number_van = gets.to_i
       puts "\nВведите количество мест в пассажирском вагоне"
@@ -259,7 +261,8 @@ class Interface
       pass_van_maker = gets.chomp
       begin
         pass_van = PassengerVan.new(number_van, pass_van_maker, pass_seats)
-        @pass_trains[@num_pass].add_van(pass_van)
+        # @pass_trains[@num_pass].add_van(pass_van)
+        pass_train.add_van(pass_van)
       rescue StandardError => e
         puts "Exception: #{e.message}"
       end
@@ -281,13 +284,19 @@ class Interface
     type = gets.to_i
     case type
     when 1
-      choose_cargo_train
-      choose_cargo_van
-      @cargo_trains[@num_cargo].del_van(@cargo_trains[@num_cargo].list_cargo_vans[@num_cargo_van])
+      # choose_cargo_train
+      # choose_cargo_van
+      # @cargo_trains[@num_cargo].del_van(@cargo_trains[@num_cargo].list_cargo_vans[@num_cargo_van])
+      cargo_train = choose_cargo_train
+      cargo_van = choose_cargo_van(cargo_train)
+      cargo_train.del_van(cargo_van)
     when 2
-      choose_passenger_train
-      choose_passenger_van
-      @pass_trains[@num_pass].del_van(@pass_trains[@num_pass].list_cargo_vans[@num_pass_van])
+      # choose_passenger_train
+      # choose_passenger_van
+      # @pass_trains[@num_pass].del_van(@pass_trains[@num_pass].list_cargo_vans[@num_pass_van])
+      pass_train = choose_pass_train
+      pass_van = choose_cargo_van(pass_train)
+      pass_train.del_van(pass_van)
     end
     puts "\n"
     del_vans
@@ -403,33 +412,52 @@ class Interface
     type = gets.to_i
     case type
     when 1
-      choose_cargo_train
-      choose_cargo_van
-      @cargo_trains[@num_cargo].taken_volume
+      cargo_train = choose_cargo_train
+      puts cargo_train
+      cargo_van = choose_cargo_van(cargo_train)
+      puts "\nВведите требуемый объем: "
+      volume = gets.chomp.to_i
+      # @cargo_trains[@num_cargo].list_cargo_vans[@num_cargo_van].take_volume(volume)
+      cargo_van.take_volume(volume)
     when 2
-      choose_passenger_train
-      choose_passenger_van
-      @pass_trains[@num_pass].taken_seat
+      # choose_passenger_train
+      # choose_passenger_van
+      pass_train = choose_passenger_train
+      pass_van = choose_passenger_van(pass_train)
+      puts "\nВы заняли место"
+      pass_van.take_seat
     end
     puts "\n"
     taken_place
   end
 
+  # def choose_cargo_train
+  #   puts "\nВведите номер грузового поезда"
+  #   for i in 0...@cargo_trains.size do
+  #     puts i.to_s + ")" + @cargo_trains[i].number.to_s
+  #   end
+  #   @num_cargo = gets.to_i
+  # end
+
   def choose_cargo_train
-    puts "\nВведите номер грузового поезда"
-    for i in 0...@cargo_trains.size do
-      puts i.to_s + ")" + @cargo_trains[i].number.to_s
-    end
-    @num_cargo = gets.to_i
+    puts 'Выберите поезд:'
+    @cargo_trains.each_with_index { |train, index| puts "#{index} #{train.number}" }
+    @cargo_trains[gets.chomp.to_i]
   end
 
   def choose_passenger_train
-    puts "\nВведите номер пассажирского поезда"
-    for i in 0...@pass_trains.size do
-      puts i.to_s + ")" + @pass_trains[i].number.to_s
-    end
-    @num_pass = gets.to_i
+    puts 'Выберите поезд:'
+    @pass_trains.each_with_index { |train, index| puts "#{index} #{train.number}" }
+    @pass_trains[gets.chomp.to_i]
   end
+
+  # def choose_passenger_train
+  #   puts "\nВведите номер пассажирского поезда"
+  #   for i in 0...@pass_trains.size do
+  #     puts i.to_s + ")" + @pass_trains[i].number.to_s
+  #   end
+  #   @num_pass = gets.to_i
+  # end
 
   def choose_station
     for i in 0...@stations.size do
@@ -437,20 +465,38 @@ class Interface
     end
   end
 
-  def choose_cargo_van
-    puts "\nВыберите номер грузового вагона"
-    for j in 0...@cargo_trains[@num_cargo].list_cargo_vans.size do
-      puts j.to_s + ")" + @cargo_trains[@num_cargo].list_cargo_vans[j].number_cargo_van.to_s
-    end
-    @num_cargo_van = gets.to_i
+  # def choose_cargo_van
+  #   puts "\nВыберите номер грузового вагона"
+  #   for j in 0...@cargo_trains[@num_cargo].list_cargo_vans.size do
+  #     puts j.to_s + ")" + @cargo_trains[@num_cargo].list_cargo_vans[j].number_cargo_van.to_s
+  #   end
+  #   @num_cargo_van = gets.to_i
+  # end
+
+  # def choose_passenger_van
+  #   puts "\nВыберите номер пассажирского вагона"
+  #   for j in 0...@pass_trains[@num_pass].list_pass_vans.size do
+  #     puts j.to_s + ")" + @pass_trains[@num_pass].list_pass_vans[j].number_pass_van.to_s
+  #   end
+  #   @num_pass_van = gets.to_i
+  # end
+
+  # def choose_cargo_van(train)
+  #   puts 'Выберите вагон:'
+  #   train.list_cargo_vans.each_with_index { |van, index| puts "#{index} #{train.list_cargo_vans[index].number_cargo_van.to_s}"  }
+  #   train.list_cargo_vans[gets.chomp.to_i]
+  # end
+
+  def choose_cargo_van(train)
+    puts 'Выберите вагон:'
+    train.list_cargo_vans.each_with_index { |_van, index| puts index }
+    train.list_cargo_vans[gets.chomp.to_i]
   end
 
-  def choose_passenger_van
-    puts "\nВыберите номер пассажирского вагона"
-    for j in 0...@pass_trains[@num_pass].list_pass_vans.size do
-      puts j.to_s + ")" + @pass_trains[@num_pass].list_pass_vans[j].number_pass_van.to_s
-    end
-    @num_pass_van = gets.to_i
+  def choose_passenger_van(train)
+    puts 'Выберите вагон:'
+    train.list_pass_vans.each_with_index {  |van, index| puts "#{index} #{train.list_pass_vans[index].number_pass_van.to_s}"  }
+    train.list_pass_vans[gets.chomp.to_i]
   end
 
   def clear

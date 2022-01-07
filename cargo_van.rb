@@ -3,13 +3,13 @@ class CargoVan
   
   include Producer
 
-  attr_reader :number_cargo_van, :type, :volume, :taken_volume
+  attr_reader :number_cargo_van, :type, :free_volume
   def initialize(number_cargo_van, maker, volume)
     type = "cargo"
     @number_cargo_van = number_cargo_van
-    @volume = volume
-    @taken_volume = 0
     self.name_factory = maker
+    @total_volume = volume
+    @free_volume = volume
     valid!
     message
   end
@@ -27,9 +27,14 @@ class CargoVan
     true
   end
 
-  def taken_volume
-    @volume -= 1
-    @taken_volume += 1
+  def take_volume(volume)
+    raise "Превышен свободный объем: #{@free_volume}" if (@free_volume - volume).negative?
+
+    @free_volume -= volume
+  end
+
+  def occupied_volume
+    @total_volume - @free_volume
   end
 
   def message
