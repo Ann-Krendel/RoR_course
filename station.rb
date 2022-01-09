@@ -43,6 +43,12 @@ class Station
     end
   end
 
+  def trains_info
+    raise 'No block given' unless block_given?
+
+    @trains.each { |train| yield(train) }
+  end
+
   def trains_by_type(type)
     trains_by_type = []
     freight_count = 0

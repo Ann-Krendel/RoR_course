@@ -207,18 +207,8 @@ class Interface
       puts i.to_s + ")" + @routes[i].route_name.to_s
     end
     num_route = gets.to_i
-    puts "\nВыберите тип поезда:
-    1) cargo - Грузовой
-    2) passenger - Пассажирский"
-    type = gets.to_i
-    case type
-    when 1
-      choose_cargo_train
-      @cargo_trains[@num_cargo].add_route(@routes[num_route])
-    when 2
-      choose_passenger_train
-      @pass_trains[@num_pass].add_route(@routes[num_route])
-    end
+    train = choose_train
+    train.add_route(@routes[num_route])
     puts "\n"
     route_for_train
   end
@@ -232,51 +222,24 @@ class Interface
     if route_mod == 0
       return
     end
-    puts "\nВыберите тип поезда:
-    1) cargo - Грузовой
-    2) passenger - Пассажирский"
-    type = gets.to_i
-    case type
-    when 1
-      choose_cargo_train
-      puts "\nВыберите действие:
+    train = choose_train
+    puts "\nВыберите действие:
+    0 - выход
+    1 - переместить поезд на предыдущую станцию
+    2 - переместить поезд на следуюшую станцию"
+    n = gets.to_i
+    while n != 0 do
+      case n
+      when 1
+        train.go_back
+      when 2
+        train.go_forward
+      end
+      puts "\nСейчас поезд на станции " + train.station.name.to_s + "\nВыберите действие:
       0 - выход
       1 - переместить поезд на предыдущую станцию
       2 - переместить поезд на следуюшую станцию"
       n = gets.to_i
-      while n != 0 do
-        case n
-        when 1
-          @cargo_trains[@num_cargo].go_back
-        when 2
-          @cargo_trains[@num_cargo].go_forward
-        end
-        puts "\nСейчас поезд на станции " + @cargo_trains[@num_cargo].station.name.to_s + "\nВыберите действие:
-        0 - выход
-        1 - переместить поезд на предыдущую станцию
-        2 - переместить поезд на следуюшую станцию"
-        n = gets.to_i
-      end
-    when 2
-      choose_passenger_train
-      puts "Выберите действие:
-      0 - выход
-      1 - переместить поезд на предыдущую станцию
-      2 - переместить поезд на следуюшую станцию"
-      n = gets.to_i
-      while n != 0 do
-        case n
-        when 1
-          @pass_trains[@num_pass].go_back
-        when 2
-          @pass_trains[@num_pass].go_forward
-        end
-        puts "\nСейчас поезд на станции " + @pass_trains[@num_pass].station.name.to_s + "\nВыберите действие:
-        0 - выход
-        1 - переместить поезд на предыдущую станцию
-        2 - переместить поезд на следуюшую станцию"
-        n = gets.to_i
-      end
     end
     puts "\n"
   end
@@ -309,11 +272,11 @@ class Interface
         when 0
           return
         when 1
-          puts @stations[input].cargo_trains + @stations[input].pass_trains
+          puts @stations[input].trains
         when 2
-          puts @stations[input].cargo_trains
+          puts @stations[input].trains_by_type(:cargo)
         when 3
-          puts @stations[input].pass_trains
+          puts @stations[input].trains_by_type(:passenger)
         end
       end
     end
