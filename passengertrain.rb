@@ -3,6 +3,10 @@ class PassengerTrain < Train
   include InstanceCounter
   
   attr_reader :number, :type
+
+  validate :number, :presence
+  validate :number, :format, NUMBER_FORMAT
+  validate :number, :type, String
   
   def initialize(number, maker)
     @list_pass_vans = []
@@ -10,7 +14,6 @@ class PassengerTrain < Train
     @number = number
     @type = :passenger
     self.name_factory = maker
-    valid!
     message
     register_instance
   end

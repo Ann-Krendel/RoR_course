@@ -1,21 +1,32 @@
 require "./modules.rb"
+require "./accessor.rb"
+require "./validation.rb"
 class Train
 
   include Producer
   include InstanceCounter
+  include Accessors
+  include Validation
   
   attr_reader :station, :number, :vans
+  strong_attr_accessor :atr_name, String
   NUMBER_FORMAT = /^([a-zA-Z]|\d){3}-*([a-zA-Z]|\d){2}$/.freeze
 
+  validate :number, :presence
+  validate :number, :format, NUMBER_FORMAT
+  validate :number, :type, String
+
+  @all_trains = []
 
   def initialize(number, maker)
     @number = number
     @speed = 0
     @vans=[]
     self.name_factory = maker
-    valid!
-    message
+    validate!
     register_instance
+    Train.all_trains << self
+    message
   end
 
   def valid!
@@ -96,6 +107,18 @@ class Train
     puts "--------------------------------"
     puts "Все объекты переданны успешно!!!"
   end
+
+  def validate_number!(number)
+    raise 'Не правильный формат номера' if number !~ NUMBER_FORMAT
+  end
+
+  protected
+
+  class << self
+    attr_accessor :all_trains
+  end
+
+  attr_accessor_with_history :station
 
   private
 

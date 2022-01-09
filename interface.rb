@@ -6,6 +6,7 @@ require "./cargotrain.rb"
 require "./passengertrain.rb"
 require "./cargo_van.rb"
 require "./passenger_van.rb"
+require "./accessor.rb"
 
 class Interface
 

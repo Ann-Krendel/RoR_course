@@ -10,21 +10,7 @@ class CargoVan < Van
     self.name_factory = maker
     @total_volume = volume
     @free_volume = volume
-    valid!
     message
-  end
-
-  def valid!
-    raise StandardError.new("invalid number\n\n") if @total_volume == 0
-    raise StandardError.new("invalid factory\n\n") if self.name_factory == ""
-    true
-  end
-
-  def valid?
-    if self.name_factory == "" || @total_volume == 0
-      return false
-    end
-    true
   end
 
   def take_volume(volume)
