@@ -12,8 +12,7 @@ class Interface
   attr_reader :stations, :cargo_trains, :pass_trains, :routes
   def initialize()
     @stations = []
-    @cargo_trains = []
-    @pass_trains = []
+    @trains = []
     @routes=[]
     @exit_continue = "Выберите действие:\n0 - выход\n1 - продолжить"
     @main_menu="Выберите действие:
@@ -129,7 +128,7 @@ class Interface
         puts "Exception: #{e.message}"
       end
       puts "\n"
-      @cargo_trains << cargo_train
+      @trains << cargo_train
     when 2
       puts "Введите номер пассажирского поезда в формате ***-**, последовательность цифровая либо буквенная (EN)"
       num_pass = gets
@@ -142,7 +141,7 @@ class Interface
         puts "Exception: #{e.message}"
       end
       puts "\n"
-      @pass_trains << pass_train
+      @trains << pass_train
     end
     create_train
   end
@@ -222,84 +221,6 @@ class Interface
     end
     puts "\n"
     route_for_train
-  end
-
-
-  def add_vans
-    puts @exit_continue
-    van_mod = gets.to_i
-    if van_mod == 0
-      return
-    end
-    puts "\nВыберите тип вагона:
-    1) cargo - Грузовой
-    2) passenger - Пассажирский"
-    type_van = gets.to_i
-    case type_van
-    when 1
-      cargo_train = choose_cargo_train
-      puts "\nВведите номер грузового вагона"
-      number_van = gets.to_i
-      puts "\nВведите объем грузового вагона"
-      cargo_vol = gets.to_i
-      puts "\nВведите изготовителя грузового вагона"
-      cargo_van_maker = gets.chomp
-      begin
-        cargo_van = CargoVan.new(number_van, cargo_van_maker, cargo_vol)
-        # @cargo_trains[@num_cargo].add_van(cargo_van)
-        cargo_train.add_van(cargo_van)
-      rescue StandardError => e
-        puts "Exception: #{e.message}"
-      end
-    when 2
-      pass_train = choose_passenger_train
-      puts "\nВведите номер пассажирского вагона"
-      number_van = gets.to_i
-      puts "\nВведите количество мест в пассажирском вагоне"
-      pass_seats = gets.to_i
-      puts "\nВведите изготовителя пассажирского вагона"
-      pass_van_maker = gets.chomp
-      begin
-        pass_van = PassengerVan.new(number_van, pass_van_maker, pass_seats)
-        # @pass_trains[@num_pass].add_van(pass_van)
-        pass_train.add_van(pass_van)
-      rescue StandardError => e
-        puts "Exception: #{e.message}"
-      end
-    end
-    puts "\n"
-    add_vans
-  end
-
-
-  def del_vans
-    puts @exit_continue
-    van_mod = gets.to_i
-    if van_mod == 0
-      return
-    end
-    puts "\nВыберите тип поезда:
-    1) cargo - Грузовой
-    2) passenger - Пассажирский"
-    type = gets.to_i
-    case type
-    when 1
-      # choose_cargo_train
-      # choose_cargo_van
-      # @cargo_trains[@num_cargo].del_van(@cargo_trains[@num_cargo].list_cargo_vans[@num_cargo_van])
-      cargo_train = choose_cargo_train
-      cargo_van = choose_cargo_van(cargo_train)
-      cargo_train.del_van(cargo_van)
-    when 2
-      # choose_passenger_train
-      # choose_passenger_van
-      # @pass_trains[@num_pass].del_van(@pass_trains[@num_pass].list_cargo_vans[@num_pass_van])
-      pass_train = choose_pass_train
-      pass_van = choose_cargo_van(pass_train)
-      pass_train.del_van(pass_van)
-    end
-    puts "\n"
-    del_vans
   end
 
 
@@ -400,64 +321,6 @@ class Interface
     station_train_list
   end
 
-  def taken_place
-    puts @exit_continue
-    van_mod = gets.to_i
-    if van_mod == 0
-      return
-    end
-    puts "\nВыберите тип поезда:
-    1) cargo - Грузовой
-    2) passenger - Пассажирский"
-    type = gets.to_i
-    case type
-    when 1
-      cargo_train = choose_cargo_train
-      puts cargo_train
-      cargo_van = choose_cargo_van(cargo_train)
-      puts "\nВведите требуемый объем: "
-      volume = gets.chomp.to_i
-      # @cargo_trains[@num_cargo].list_cargo_vans[@num_cargo_van].take_volume(volume)
-      cargo_van.take_volume(volume)
-    when 2
-      # choose_passenger_train
-      # choose_passenger_van
-      pass_train = choose_passenger_train
-      pass_van = choose_passenger_van(pass_train)
-      puts "\nВы заняли место"
-      pass_van.take_seat
-    end
-    puts "\n"
-    taken_place
-  end
-
-  # def choose_cargo_train
-  #   puts "\nВведите номер грузового поезда"
-  #   for i in 0...@cargo_trains.size do
-  #     puts i.to_s + ")" + @cargo_trains[i].number.to_s
-  #   end
-  #   @num_cargo = gets.to_i
-  # end
-
-  def choose_cargo_train
-    puts 'Выберите поезд:'
-    @cargo_trains.each_with_index { |train, index| puts "#{index} #{train.number}" }
-    @cargo_trains[gets.chomp.to_i]
-  end
-
-  def choose_passenger_train
-    puts 'Выберите поезд:'
-    @pass_trains.each_with_index { |train, index| puts "#{index} #{train.number}" }
-    @pass_trains[gets.chomp.to_i]
-  end
-
-  # def choose_passenger_train
-  #   puts "\nВведите номер пассажирского поезда"
-  #   for i in 0...@pass_trains.size do
-  #     puts i.to_s + ")" + @pass_trains[i].number.to_s
-  #   end
-  #   @num_pass = gets.to_i
-  # end
 
   def choose_station
     for i in 0...@stations.size do
@@ -465,39 +328,78 @@ class Interface
     end
   end
 
-  # def choose_cargo_van
-  #   puts "\nВыберите номер грузового вагона"
-  #   for j in 0...@cargo_trains[@num_cargo].list_cargo_vans.size do
-  #     puts j.to_s + ")" + @cargo_trains[@num_cargo].list_cargo_vans[j].number_cargo_van.to_s
-  #   end
-  #   @num_cargo_van = gets.to_i
-  # end
 
-  # def choose_passenger_van
-  #   puts "\nВыберите номер пассажирского вагона"
-  #   for j in 0...@pass_trains[@num_pass].list_pass_vans.size do
-  #     puts j.to_s + ")" + @pass_trains[@num_pass].list_pass_vans[j].number_pass_van.to_s
-  #   end
-  #   @num_pass_van = gets.to_i
-  # end
-
-  # def choose_cargo_van(train)
-  #   puts 'Выберите вагон:'
-  #   train.list_cargo_vans.each_with_index { |van, index| puts "#{index} #{train.list_cargo_vans[index].number_cargo_van.to_s}"  }
-  #   train.list_cargo_vans[gets.chomp.to_i]
-  # end
-
-  def choose_cargo_van(train)
-    puts 'Выберите вагон:'
-    train.list_cargo_vans.each_with_index { |_van, index| puts index }
-    train.list_cargo_vans[gets.chomp.to_i]
+  def add_vans
+    train = choose_train
+    vans_stats_message(train)
+    van_stats = gets.chomp.to_i
+    puts "Введите изготовителя вагона: "
+    maker = gets.chomp
+    van = PassengerVan.new(maker, van_stats) if train.type == :passenger
+    van = CargoVan.new(maker, van_stats) if train.type == :cargo
+    train.add_van(van)
+    puts 'Вагон прицеплен'
   end
 
-  def choose_passenger_van(train)
-    puts 'Выберите вагон:'
-    train.list_pass_vans.each_with_index {  |van, index| puts "#{index} #{train.list_pass_vans[index].number_pass_van.to_s}"  }
-    train.list_pass_vans[gets.chomp.to_i]
+
+  def vans_stats_message(train)
+    puts 'Для добавления пассажирсого вагона ведите кол-во мест' if train.type == :passenger
+    puts 'Для добавления грузового вагона введите объём' if train.type == :cargo
   end
+
+
+  def del_vans
+    train = choose_train
+    if train.vans.nil?
+      puts 'У поезда не прицеплены вагоны'
+      return
+    end
+
+    train.del_van(train.vans.last)
+    puts 'Вагон отцеплен'
+  end
+
+
+  def choose_train
+    puts 'Выберите поезд:'
+    @trains.each_with_index { |train, index| puts "#{index} #{train.number}" }
+    @trains[gets.chomp.to_i]
+  end
+
+
+  def choose_van(train)
+    puts 'Выберите вагон:'
+    train.vans.each_with_index { |_van, index| puts index }
+    train.vans[gets.chomp.to_i]
+  end
+
+
+  def taken_place
+    train = choose_train
+    van = choose_van(train)
+
+    if van.type == :passenger
+      van.take_seat
+      puts "Место занято, осталось мест:#{van.free_seats}"
+    elsif van.type == :cargo
+      puts 'Введите занимаемый объём:'
+      volume = gets.chomp.to_i
+      van.take_volume(volume)
+      puts "Успешно занято, осталось места:#{van.free_volume}"
+    end
+  end
+
+  def van_info_block
+    ->(van, index) { puts "  :Вагон№:#{index}, тип:#{van.type}, #{van_status(van)}" }
+  end
+
+  def train_info_block
+    lambda do |train|
+      puts " :Поезд№:#{train.number}, тип:#{train.type}, вагонов:#{train.vans.count}"
+      train.vans_info(&van_info_block)
+    end
+  end
+
 
   def clear
     system("clear") || system("cls")

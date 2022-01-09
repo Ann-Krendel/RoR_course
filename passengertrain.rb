@@ -2,24 +2,17 @@ class PassengerTrain < Train
 
   include InstanceCounter
   
-  attr_reader :list_pass_vans, :number
+  attr_reader :number, :type
   
   def initialize(number, maker)
     @list_pass_vans = []
     @speed = 0
     @number = number
+    @type = :passenger
     self.name_factory = maker
     valid!
     message
     register_instance
-  end
-
-  def add_van(pass_van)
-    @list_pass_vans << pass_van if @speed == 0 and pass_van.type == "passenger"
-  end
-
-  def del_van(pass_van)
-    @list_pass_vans.delete(pass_van) if @speed == 0
   end
 
 end

@@ -4,13 +4,14 @@ class Train
   include Producer
   include InstanceCounter
   
-  attr_reader :station, :number, :list_vans
+  attr_reader :station, :number, :vans
+  NUMBER_FORMAT = /^([a-zA-Z]|\d){3}-*([a-zA-Z]|\d){2}$/.freeze
 
 
   def initialize(number, maker)
     @number = number
     @speed = 0
-    @list_vans=[]
+    @vans=[]
     self.name_factory = maker
     valid!
     message
@@ -18,13 +19,13 @@ class Train
   end
 
   def valid!
-    raise StandardError.new("invalid number\n\n") if @number !~ /^([a-zA-Z]|\d){3}-*([a-zA-Z]|\d){2}$/
+    raise StandardError.new("invalid number\n\n") if @number !~ NUMBER_FORMAT
     raise StandardError.new("invalid factory\n\n") if self.name_factory == ""
     true
   end
 
   def valid?
-    if @number !~ /^([a-zA-Z]|\d){3}-*([a-zA-Z]|\d){2}$/ || self.name_factory == ""
+    if @number !~ NUMBER_FORMAT || self.name_factory == ""
       return false
     end
     true
@@ -53,11 +54,12 @@ class Train
   end
 
   def add_van(van)
-    @list_vans << van if @speed == 0
+    @vans = [] if @vans.class == NilClass
+    @vans << van if van.type == @type &&  @speed == 0
   end
 
   def del_van(van)
-    @list_vans.delete(van) if @speed == 0
+    @vans.delete(van) if @speed == 0
   end
 
   def add_route(route)
@@ -88,7 +90,7 @@ class Train
   end
 
   def each_van(&block)
-    @list_vans.each do |van|
+    @vans.each do |van|
       block.call(van)
     end
     puts "--------------------------------"

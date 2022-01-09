@@ -3,11 +3,10 @@ class Station
 
   include InstanceCounter
 
-  attr_reader :trains, :name, :cargo_trains, :pass_trains
+  attr_reader :trains, :name
   def initialize(name)
     @name = name
-    @cargo_trains = []
-    @pass_trains = []
+    @trains = []
     valid!
     message
     self.class.all << self
@@ -31,41 +30,29 @@ class Station
   end
 
   def add_train(train)
-    if train.class == CargoTrain
-      @cargo_trains << train
-    end
-    if train.class == PassengerTrain
-      @pass_trains << train
-    end
-  end
-
-  def count_trains_cargo
-    @cargo_trains.size
-  end
-
-  def count_trains_pass
-    @pass_trains.size
+    @trains << train
   end
 
   def depart_train(train)
-    if train.class == CargoTrain
-      @cargo_trains.delete(train)
-    end
-    if train.class == PassengerTrain
-      @pass_trains.delete(train)
-    end
+    @trains.delete(train)
   end
 
-  def each_cargo_train(&block)
-    @cargo_trains.each do |train|
+  def each_train(&block)
+    @trains.each do |train|
       block.call(train)
     end
   end
 
-  def each_pass_train(&block)
-    @pass_trains.each do |train|
-      block.call(train)
+  def trains_by_type(type)
+    trains_by_type = []
+    freight_count = 0
+    coach_count = 0
+    @trains.each do |train|
+      trains_by_type << train if train.type == type
+      freight_count += 1 if train.type == :cargo
+      coach_count += 1 if train.type == :passenger
     end
+    { trains_by_type: trains_by_type, freight_count: freight_count, coach_count: coach_count }
   end
 
   def message

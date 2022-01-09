@@ -1,13 +1,14 @@
 require "./modules.rb"
-class PassengerVan
+require "./van.rb"
+class PassengerVan < Van
   
   include Producer
 
-  attr_reader :number_pass_van, :type
-  def initialize(number_pass_van, maker, count_seats)
-    type = "passenger"
-    @number_pass_van = number_pass_van
+  attr_reader :type
+  def initialize(maker, count_seats)
+    @type = :passenger
     self.name_factory = maker
+    @count_seats = count_seats
     @seats = []
     creation_seats(count_seats)
     valid!
@@ -15,13 +16,13 @@ class PassengerVan
   end
 
   def valid!
-    raise StandardError.new("invalid number\n\n") if @number_pass_van == 0
+    raise StandardError.new("invalid number\n\n") if @count_seats <= 0
     raise StandardError.new("invalid factory\n\n") if self.name_factory == ""
     true
   end
 
   def valid?
-    if self.name_factory == "" || @number_pass_van == 0
+    if self.name_factory == "" || @count_seats <= 0
       return false
     end
     true
@@ -43,7 +44,7 @@ class PassengerVan
   end
 
   def message
-    puts "Зарегистрирован пассажирский вагон № #{@number_pass_van}"
+    puts "Зарегистрирован пассажирский вагон"
   end
 
   private

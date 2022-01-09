@@ -1,12 +1,12 @@
 require "./modules.rb"
-class CargoVan
+require "./van.rb"
+class CargoVan < Van
   
   include Producer
 
-  attr_reader :number_cargo_van, :type, :free_volume
-  def initialize(number_cargo_van, maker, volume)
-    type = "cargo"
-    @number_cargo_van = number_cargo_van
+  attr_reader :type, :free_volume
+  def initialize(maker, volume)
+    @type = :cargo
     self.name_factory = maker
     @total_volume = volume
     @free_volume = volume
@@ -15,13 +15,13 @@ class CargoVan
   end
 
   def valid!
-    raise StandardError.new("invalid number\n\n") if @number_cargo_van == 0
+    raise StandardError.new("invalid number\n\n") if @total_volume == 0
     raise StandardError.new("invalid factory\n\n") if self.name_factory == ""
     true
   end
 
   def valid?
-    if self.name_factory == "" || @number_cargo_van == 0
+    if self.name_factory == "" || @total_volume == 0
       return false
     end
     true
@@ -38,7 +38,7 @@ class CargoVan
   end
 
   def message
-    puts "Зарегистрирован грузовой вагон № #{@number_cargo_van}"
+    puts "Зарегистрирован грузовой вагон"
   end
   
 end
